@@ -76,12 +76,33 @@ public class Practice {
    * @return a sorted list of all reachable vertex values by
    */
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
+    // if starting = null or visited contains start return;
+    // create list to keep track of reachble nodes
+    // add starting to visited and reachable nodes
+    // recurse on neighbors
+    // sort list using built in method
+    // return sorted list
     // Unimplemented: perform a depth-first search and sort the collected values.
-    return sortedReachableHelper(starting, new ArrayList<>());
+    return sortedReachableHelper(starting, new ArrayList<>(), new HashSet<>());
   }
 
   public static List<Integer> sortedReachableHelper(Vertex<Integer> starting, List<Integer> reachable, Set<Vertex<Integer>> visited) {
-    if(starting == null ||)
+    if(starting == null || visited.contains(starting)){
+      return new ArrayList<>();
+    }
+
+    visited.add(starting);
+    reachable.add(starting.data);
+
+    for(var neighbor : starting.neighbors){
+      sortedReachableHelper(neighbor, reachable, visited);
+    }
+
+
+    // sort list in ascending order
+    Collections.sort(reachable);
+
+    return reachable;
 
   }
 
