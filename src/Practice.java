@@ -171,17 +171,17 @@ public class Practice {
       return false;
     }
 
-    if(v1 == v2){
+    if (v1 == v2) {
       return true;
     }
 
     visited.add(v1);
 
     for (var neighbor : v1.neighbors) {
-      if (!visited.contains(neighbor) && twoWayHelper(neighbor, v2, visited)){
-          return true;
-        }
+      if (!visited.contains(neighbor) && twoWayHelper(neighbor, v2, visited)) {
+        return true;
       }
+    }
 
     return false;
 
@@ -249,6 +249,40 @@ public class Practice {
    *         company, false otherwise
    */
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+
+    // helper method utilizing set to keep track of visited people
+    // if person.getConnections
+    // if professional = null return false
+    // if person.connections equals companyName return true
+    // recurse on neighbors
+    // if nothing found return false
+
+    return hasExtendedConnectionAtCompanyHelper(person, companyName, new HashSet<>());
+  }
+
+  public static boolean hasExtendedConnectionAtCompanyHelper(Professional person, String companyName,
+      Set<Professional> visited) {
+    if (person == null) {
+      return false;
+    }
+
+    visited.add(person);
+
+    if (person.getCompany().equals(companyName)) {
+      return true;
+    }
+
+    for (Professional connections : person.getConnections()) {
+      if (!visited.contains(connections)) {
+        if (connections.getCompany().equals(companyName)) {
+          return true;
+        }
+      }
+      if (hasExtendedConnectionAtCompanyHelper(connections, companyName, visited)) {
+        return true;
+      }
+    }
+
     return false;
   }
 }
