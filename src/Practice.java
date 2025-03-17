@@ -37,21 +37,22 @@ public class Practice {
   }
 
   public static int oddVerticesHelper(Vertex<Integer> starting, Set<Vertex<Integer>> visited) {
-    if(starting == null) return 0;
+    if (starting == null)
+      return 0;
 
     int count = 0;
 
-    if(starting.data % 2 != 0) {
+    if (starting.data % 2 != 0) {
       count++;
     }
 
     visited.add(starting);
 
-    for(var neighbor : starting.neighbors){
-      if(!visited.contains(neighbor)){
-      count += oddVerticesHelper(neighbor, visited);
+    for (var neighbor : starting.neighbors) {
+      if (!visited.contains(neighbor)) {
+        count += oddVerticesHelper(neighbor, visited);
+      }
     }
-  }
 
     return count;
   }
@@ -86,18 +87,18 @@ public class Practice {
     return sortedReachableHelper(starting, new ArrayList<>(), new HashSet<>());
   }
 
-  public static List<Integer> sortedReachableHelper(Vertex<Integer> starting, List<Integer> reachable, Set<Vertex<Integer>> visited) {
-    if(starting == null || visited.contains(starting)){
+  public static List<Integer> sortedReachableHelper(Vertex<Integer> starting, List<Integer> reachable,
+      Set<Vertex<Integer>> visited) {
+    if (starting == null || visited.contains(starting)) {
       return new ArrayList<>();
     }
 
     visited.add(starting);
     reachable.add(starting.data);
 
-    for(var neighbor : starting.neighbors){
+    for (var neighbor : starting.neighbors) {
       sortedReachableHelper(neighbor, reachable, visited);
     }
-
 
     // sort list in ascending order
     Collections.sort(reachable);
@@ -123,16 +124,17 @@ public class Practice {
     return sortedReachableMapHelper(graph, starting, new HashSet<>(), new ArrayList<>());
   }
 
-  public static List<Integer> sortedReachableMapHelper(Map<Integer, Set<Integer>> graph, int starting, Set<Integer> visited, List<Integer> reachable){
-    if(!graph.containsKey(starting)){
+  public static List<Integer> sortedReachableMapHelper(Map<Integer, Set<Integer>> graph, int starting,
+      Set<Integer> visited, List<Integer> reachable) {
+    if (!graph.containsKey(starting)) {
       return new ArrayList<>();
     }
 
     visited.add(starting);
     reachable.add(starting);
 
-    for(int neighbor : graph.get(starting)){
-      if(!visited.contains(neighbor)){
+    for (int neighbor : graph.get(starting)) {
+      if (!visited.contains(neighbor)) {
         sortedReachableMapHelper(graph, neighbor, visited, reachable);
       }
     }
@@ -140,7 +142,7 @@ public class Practice {
     Collections.sort(reachable);
 
     return reachable;
- }
+  }
 
   /**
    * Returns true if and only if it is possible both to reach v2 from v1 and to
@@ -159,7 +161,30 @@ public class Practice {
    *         otherwise
    */
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+    return twoWayHelper(v1, v2, new HashSet<>()) && twoWayHelper(v2, v1, new HashSet<>());
+  }
+
+  public static <T> boolean twoWayHelper(Vertex<T> v1, Vertex<T> v2, Set<Vertex<T>> visited) {
+    // if v1 or v2 are null return false
+    // if v1 neighbor contains v2 && v2 neighbor contains v1, return true
+    if (v1 == null || v2 == null) {
+      return false;
+    }
+
+    if(v1 == v2){
+      return true;
+    }
+
+    visited.add(v1);
+
+    for (var neighbor : v1.neighbors) {
+      if (!visited.contains(neighbor) && twoWayHelper(neighbor, v2, visited)){
+          return true;
+        }
+      }
+
     return false;
+
   }
 
   /**
@@ -182,25 +207,26 @@ public class Practice {
     return positivePathExists(graph, starting, ending, new HashSet<>());
   }
 
-  public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending, Set<Integer> visited){
-    if(starting == ending){
+  public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending,
+      Set<Integer> visited) {
+    if (starting == ending) {
       return true;
     }
-    
-    if(starting < 0){
+
+    if (starting < 0) {
       return false;
     }
 
-    if(ending < 0){
+    if (ending < 0) {
       return false;
     }
 
     visited.add(starting);
 
-    for(var neighbor : graph.get(starting)){
-      
-      if(neighbor > 0  && !visited.contains(neighbor)){
-        if(positivePathExists(graph, neighbor, ending, visited)){
+    for (var neighbor : graph.get(starting)) {
+
+      if (neighbor > 0 && !visited.contains(neighbor)) {
+        if (positivePathExists(graph, neighbor, ending, visited)) {
           return true;
         }
       }
